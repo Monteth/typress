@@ -8,10 +8,8 @@ const handleData = ({data, res, next}) => data.error
     ? res.json(data.errors)
     : res.json(data.data);
 
-// @ts-ignore
-const getUser = (req) => req.user
-// @ts-ignore
-const getAccessLevels = (req) => req.user.accessLevels
+const getUser = (req: Request) => req.auth
+const getAccessLevels = (req: Request) => req.auth.accessLevels
 const generateHasAccessLvl = (lvl: string) => (req: Request) => getAccessLevels(req).includes(lvl)
 const accessError = () => ({error: true, errors: [{message: "You don't have access to this resource"}]})
 
@@ -28,7 +26,7 @@ TaskController.get('/:id', async (req, res, next) => {
     handleData({data, next, res})
 });
 
-TaskController.post('/', async (req, res, next) => {
+TaskController.post('/', async (req: Request, res, next) => {
     const data = await TaskService.createTask(req.body)
 
     handleData({data, next, res})
