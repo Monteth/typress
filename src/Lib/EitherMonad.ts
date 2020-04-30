@@ -2,12 +2,12 @@ import {Err} from "./Err";
 
 type EitherMonad<T> = EMLeft<T> | EMRight<T>
 
-type EMLeft<T> = {
+type EMRight<T> = {
     valid: true;
     data: T;
 }
 
-type EMRight<T> = {
+type EMLeft<T> = {
     valid: false;
     error: Err[];
 }
