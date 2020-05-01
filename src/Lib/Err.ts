@@ -3,4 +3,6 @@ type Err = {
     payload?: object;
 }
 
-export {Err}
+type Errs = Err[]
+
+export {Err, Errs}
