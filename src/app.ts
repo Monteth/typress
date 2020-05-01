@@ -9,19 +9,17 @@ import indexRouter from './Controllers/IndexController';
 import authController from './Controllers/AuthController';
 import tasksRouter from './Controllers/TaskController';
 import timeRecordController from "./Controllers/TimeRecordController";
-import http from "http";
-
-const uriTemplate = "mongodb+srv://<user>:<password>@cluster0-jhmtv.mongodb.net/<dbname>?retryWrites=true&w=majority";
 
 if (!config.get("myprivatekey")) {
     console.error("FATAL ERROR: myprivatekey is not defined.");
     process.exit(1);
 }
+if (!config.get("dbUri")) {
+    console.error("FATAL ERROR: dbUri is not defined.");
+    process.exit(1);
+}
 
-const uri = uriTemplate
-    .replace("<password>", config.get("mongodbpass"))
-    .replace("<user>", config.get("mongodbuser"))
-    .replace("<dbname>", config.get("mongodbname"))
+const uri: string = config.get("dbUri")
 
 const app = express();
 
