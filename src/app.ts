@@ -9,17 +9,19 @@ import indexRouter from './Controllers/IndexController';
 import authController from './Controllers/AuthController';
 import tasksRouter from './Controllers/TaskController';
 import timeRecordController from "./Controllers/TimeRecordController";
+import Config from "./Lib/Const";
 
-if (!config.get("myprivatekey")) {
+if (!config.get(Config.PRIVATE_KEY)) {
     console.error("FATAL ERROR: myprivatekey is not defined.");
     process.exit(1);
 }
-if (!config.get("dbUri")) {
+
+if (!config.get(Config.DB_URI)) {
     console.error("FATAL ERROR: dbUri is not defined.");
     process.exit(1);
 }
 
-const uri: string = config.get("dbUri")
+const uri: string = config.get(Config.DB_URI)
 
 const app = express();
 
