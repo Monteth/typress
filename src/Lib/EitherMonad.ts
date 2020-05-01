@@ -1,22 +1,33 @@
-import {Err} from "./Err";
-
-type EitherMonad<T> = EMLeft<T> | EMRight<T>
-
-type EMRight<T> = {
-    valid: true;
-    data: T;
+type Left<L> = {
+    left: true;
+    right: false;
+    value: L;
 }
 
-type EMLeft<T> = {
-    valid: false;
-    error: Err[];
+type Right<R> = {
+    left: false;
+    right: true;
+    value: R;
 }
 
-function rightConstructor<T>(data:T):EitherMonad<T> {return {valid: true, data}}
+type Either<L, R> = Left<L> | Right<R>
 
-function leftConstructor<T>(error:Err[]):EitherMonad<T> {return {valid: false, error}}
+function leftConstructor<L, R>(data: L): Either<L, R> {
+    return {
+        left: true,
+        right: false,
+        value: data
+    }
+}
 
+function rightConstructor<L, R>(data: R): Either<L, R> {
+    return {
+        left: false,
+        right: true,
+        value: data
+    }
+}
 
-const Either = {right: rightConstructor, left: leftConstructor}
+const Either = {left: leftConstructor, right: rightConstructor}
 
 export default Either;
