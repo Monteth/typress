@@ -1,18 +1,16 @@
 import Either from "./EitherMonad";
 import {Err, Errs} from "./Err";
 
-function success<T>(data: T) {
-    return Either.right<Errs,T>(data)
-}
+type Errorable<T> = Either<Errs, T>
 
-function error<T>(error: Err) {
-    return Either.left<Errs, T>([error])
-}
+const success = <T>(data: T) => Either.right<Errs, T>(data);
 
-function errors<T>(errors: Errs) {
-    return Either.left<Errs, T>(errors)
-}
+const error = <T>(error: Err) => Either.left<Errs, T>([error]);
 
-const Errorable = {success, error, errors}
+const errors = <T>(errors: Errs) => Either.left<Errs, T>(errors);
+
+const addErrors = <T>(m: Errorable<T>, e: Errs): Errorable<T> => Either.mapLeft(m, (ers) => errors(ers.concat(e)));
+
+const Errorable = {success, error, errors, addErrors}
 
 export default Errorable
