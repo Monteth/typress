@@ -24,19 +24,19 @@ const rightConstructor = <L, R>(data: R): Either<L, R> => ({
     value: data
 });
 
-const map = <L, R>(m: Either<L,R>, left: ((v: L) => Either<L, R>), right: ((v: R) => Either<L, R>) ): Either<L, R> => {
+const map = <L, R, LResult, RResult>(m: Either<L,R>, left: ((v: L) => Either<LResult, R>), right: ((v: R) => Either<L, RResult>) ): Either<LResult, R> | Either<L,RResult> => {
     return m.left ? left(m.value) : right(m.value);
 }
 
-const mapLeft = <L,R>(m: Either<L,R>, left: ((v: L) => Either<L, R>)): Either<L, R> => {
+const mapLeft = <L,R, Result>(m: Either<L,R>, left: ((v: L) => Either<Result, R>)): Either<Result, R> => {
     return m.left ? left(m.value) : m;
 }
 
-const mapRight = <L,R>(m: Either<L,R>, right: ((v: R) => Either<L, R>)): Either<L, R> => {
+const mapRight = <L,R, Result>(m: Either<L,R>, right: ((v: R) => Either<L, Result>)): Either<L, Result> => {
     return m.right ? right(m.value) : m;
 };
 
-const flatMap = <L, R, Result>(m: Either<L,R>, left: ((v: L) => Result), right: ((v: R) => Result) ): Result => {
+const flatMap = <L, R, LResult, RResult>(m: Either<L,R>, left: ((v: L) => LResult), right: ((v: R) => RResult) ): LResult | RResult => {
     return m.left ? left(m.value) : right(m.value);
 }
 
