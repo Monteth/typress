@@ -1,12 +1,12 @@
-import express, {Request} from 'express';
-import TaskService from "../Model/Tasks/TaskService";
+import express, {NextFunction, Request, Response} from 'express';
+import TaskService, {TaskModel} from "../Model/Tasks/TaskService";
 import AccessLevels from "../Model/Users/AccessLevels";
+import Validated from "../Lib/Validated";
+import {TaskType} from "../Model/Tasks/Task";
+import Either from "../Lib/Either";
 const TaskController = express.Router();
 
-// @ts-ignore
-const handleData = ({data, res, next}) => data.error
-    ? res.json(data.errors)
-    : res.json(data.data);
+const handleData = <T>({data, res, next}: {data: Validated<T>, res: Response, next: NextFunction}) => res.json(data.value)
 
 const getUser = (req: Request) => req.auth
 const getAccessLevels = (req: Request) => req.auth.accessLevels
@@ -17,7 +17,7 @@ const accessError = () => ({error: true, errors: [{message: "You don't have acce
 TaskController.get('/', async (req, res, next) => {
     const data = await TaskService.listTasks()
 
-    handleData({data, next, res})
+    handleData<TaskModel[]>({data, next, res})
 });
 
 TaskController.get('/:id', async (req, res, next) => {
@@ -45,9 +45,9 @@ TaskController.delete('/:id', async (req, res, next) => {
 
     const data = hasAccessLvl(req)
         ? await success()
-        : accessError()
+        : Validated.error<TaskModel>({message: "Not found`"})
 
-    handleData({data, res, next})
+    handleData<TaskModel>({data, res, next})
 });
 
 export default TaskController;

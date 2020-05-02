@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-type TaskType = {_id: String, title: String, done: boolean}
+type TaskType = {_id: string, title: string, done: boolean} & mongoose.Document
 
 const taskSchema = new mongoose.Schema({
     title: {
@@ -13,5 +13,5 @@ const taskSchema = new mongoose.Schema({
     }
 })
 
-const Task = mongoose.model("Task", taskSchema)
+const Task = mongoose.model<TaskType>("Task", taskSchema)
 export {Task, TaskType}
