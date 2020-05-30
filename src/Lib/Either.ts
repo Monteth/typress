@@ -1,12 +1,10 @@
 export type Left<L> = {
     left: true;
-    right: false;
     value: L;
 }
 
 export type Right<R> = {
     left: false;
-    right: true;
     value: R;
 }
 
@@ -14,13 +12,11 @@ type Either<L, R> = Left<L> | Right<R>
 
 const leftConstructor = <L, R>(data: L): Either<L, R> => ({
     left: true,
-    right: false,
     value: data
 });
 
 const rightConstructor = <L, R>(data: R): Either<L, R> => ({
     left: false,
-    right: true,
     value: data
 });
 
