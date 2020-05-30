@@ -38,15 +38,16 @@ const errors = <T>(errors: Errs): Validated<T> => ({
     succeed: false
 });
 
-/**
- *  Adds errors to Validated monad.
- *  Takes errors and returns Validated<T> with old and new errors.
- *  @param { Validated<T> } m - Validated monad
- *  @param { Errs } newErrors - New errors
- *  @return { Validated<T> } - Errored monad with newErrors attached.
- */
-const addErrors = <T>(m: Validated<T>, newErrors: Errs): Validated<T> => {
-    return fromEither(Either.mapLeft<Errs, T, Errs>(m, (ers) => ers.concat(newErrors)));
+// /**
+//  *  Applies function on right monad value.
+//  *  Takes Either and function receiving right value.
+//  *  Returns result of function applied on given monad wrapped in Either.
+//  *  @param { Either<L, R> } m - Either monad
+//  *  @param { ( v: R ) => Result } rf - Function applied to monad value if either is right
+//  *  @return { Either<L, Result> } - Result of rf
+//  */
+const map = <R, Result>(m: Either<Errs,R>, rf: ((v: R) => Result)): Either<Errs, Result> => {
+    return m.left ? errors<Result>(m.value) : success(rf(m.value));
 };
 
 /**
@@ -58,6 +59,6 @@ const fromEither = <T>(e: Either<Errs, T>): Validated<T> => {
     return Either.fold(e, ((e: Errs) => errors<T>(e)), ((d: T) => success<T>(d)) );
 }
 
-const Validated = {success, error, errors, addErrors, fromEither}
+const Validated = {success, error, errors, fromEither, map}
 
 export default Validated
