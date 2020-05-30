@@ -10,7 +10,6 @@ type Validated<T> = Left<Errs> & {succeed: false} | Right<T> & {succeed: true}
  */
 const success = <T>(data: T): Validated<T> => ({
     left: false,
-    right: true,
     value: data,
     succeed: true
 });
@@ -23,7 +22,6 @@ const success = <T>(data: T): Validated<T> => ({
  */
 const error = <T>(error: Err): Validated<T> => ({
     left: true,
-    right: false,
     value: [error],
     succeed: false
 });
@@ -36,7 +34,6 @@ const error = <T>(error: Err): Validated<T> => ({
  */
 const errors = <T>(errors: Errs): Validated<T> => ({
     left: true,
-    right: false,
     value: errors,
     succeed: false
 });
