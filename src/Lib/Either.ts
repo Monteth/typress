@@ -107,6 +107,19 @@ const foldRight = <L,R, Result>(m: Either<L,R>, rf: ((v: R) => Result), def: Res
     return m.left ? def : rf(m.value);
 }
 
-const Either = {left: leftConstructor, right: rightConstructor, map, mapLeft, flatMap, flatMapLeft, fold, foldLeft, foldRight}
+/**
+ *  Applies function on right or left monad value.
+ *  Takes Either and function receiving right value and function receiving left value.
+ *  Returns result of function applied on given monad wrapped in Either.
+ *  @param { Either<L, R> } m - Either monad
+ *  @param { ( v: L ) =>  LR} lf - Function applied to monad value if either is right
+ *  @param { ( v: R ) => RR } rf - Function applied to monad value if either is right
+ *  @return { Either<LR, RR> } - Result of rf
+ */
+const bimap = <L, R, LR, RR>(m: Either<L, R>, lf: (v: L) => LR, rf: (v: R) => RR): Either<LR, RR> => {
+    return m.left ? leftConstructor<LR, RR>(lf(m.value)) : rightConstructor<LR, RR>(rf(m.value));
+}
+
+const Either = {left: leftConstructor, right: rightConstructor, map, mapLeft, bimap, flatMap, flatMapLeft, fold, foldLeft, foldRight}
 
 export default Either;
